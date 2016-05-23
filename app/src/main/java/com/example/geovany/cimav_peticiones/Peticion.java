@@ -5,7 +5,7 @@ package com.example.geovany.cimav_peticiones;
  */
 public class Peticion {
     private int id, descuentoSolicitado, prioridad;
-    private String codigo, nombreCliente;
+    private String codigo, nombreCliente, descripcion;
     private double subTotal;
 
     public Peticion(){
@@ -58,6 +58,14 @@ public class Peticion {
 
     public void setPrioridad(int prioridad) {
         this.prioridad = prioridad;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

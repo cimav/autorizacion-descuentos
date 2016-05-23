@@ -46,7 +46,8 @@
                     android:layout_height="wrap_content"
                     android:layout_column="2"
                     android:layout_marginLeft="8dp"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:maxLines="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -72,7 +73,8 @@
                     android:layout_height="wrap_content"
                     android:layout_column="2"
                     android:layout_marginLeft="8dp"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:maxLines="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -98,7 +100,8 @@
                     android:layout_height="wrap_content"
                     android:layout_column="2"
                     android:layout_marginLeft="8dp"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:maxLines="1" />
             </LinearLayout>
 
             <LinearLayout
@@ -124,7 +127,8 @@
                     android:layout_height="wrap_content"
                     android:layout_column="2"
                     android:layout_marginLeft="8dp"
-                    android:textColor="#ffffff" />
+                    android:textColor="#ffffff"
+                    android:maxLines="1" />
             </LinearLayout>
         </LinearLayout>
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -135,12 +139,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="99dp"
-                android:orientation="vertical">
+                android:layout_height="80dp"
+                android:orientation="vertical"
+                android:layout_weight="2.85">
 
             </LinearLayout>
 
@@ -160,6 +166,14 @@
                 android:focusable="true" android:focusableInTouchMode="true"
                 android:paddingBottom="20dp"
                 android:paddingTop="20dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/imageAlerta"
+                    android:src="@mipmap/triangulo_alerta"
+                    android:layout_marginRight="5dp"
+                    android:visibility="invisible" />
 
                 <EditText
                     android:id="@+id/edtxDescuento"
@@ -291,7 +305,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:paddingTop="0dp">
 

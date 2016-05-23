@@ -93,6 +93,7 @@ public class Principal extends AppCompatActivity {
                                 id = Integer.parseInt(jsonObject.getString("id").toString());
                                 codigo  = jsonObject.getString("codigo").toString();
                                 nombreCliente = jsonObject.getString("cliente").toString();
+                                descripcion = jsonObject.getString("descripcion").toString();
                                 subTotal = Double.parseDouble(jsonObject.getString("subTotal").toString());
                                 descuentoSolicitado = Integer.parseInt(jsonObject.getString("descuentoSolicitado").toString());
                                 prioridad = Integer.parseInt(jsonObject.getString("prioridad").toString());
@@ -101,6 +102,7 @@ public class Principal extends AppCompatActivity {
                                 Peticion peticion = new Peticion();
                                 peticion.setId(id);
                                 peticion.setNombreCliente(nombreCliente);
+                                peticion.setDescripcion(descripcion);
                                 peticion.setCodigo(codigo);
                                 peticion.setSubTotal(subTotal);
                                 peticion.setDescuentoSolicitado(descuentoSolicitado);
@@ -127,6 +129,7 @@ public class Principal extends AppCompatActivity {
                                     Bundle bDatos = new Bundle();
                                     bDatos.putString("codigo",codigo);
                                     bDatos.putString("nombreCliente", selected.getNombreCliente());
+                                    bDatos.putString("descripcion", selected.getDescripcion());
                                     bDatos.putDouble("subTotal", selected.getSubTotal());
                                     bDatos.putInt("descuentoSolicitado", selected.getDescuentoSolicitado());
 

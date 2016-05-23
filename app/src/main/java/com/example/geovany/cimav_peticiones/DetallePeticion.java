@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,12 +66,14 @@ public class DetallePeticion extends AppCompatActivity {
         inRecibir = getIntent();
         Bundle extras = inRecibir.getExtras();
         String nombreCliente = extras.getString("nombreCliente");
+        String descripcion = extras.getString("descripcion");
         subTotal = extras.getDouble("subTotal");
         descuentoSolicitado = extras.getInt("descuentoSolicitado");
         descuentoAprobado = descuentoSolicitado;
 
         //Mostrar los datos por el TextView
         txtNombreCliente.setText(nombreCliente);
+        txtDescripcion.setText(descripcion);
         txtSubTotal.setText("$" + subTotal);
         txtDescuentoSolicitado.setText(descuentoSolicitado + "%");
         edtxDescuentoAprobado.setText(descuentoAprobado+"");
@@ -87,31 +91,42 @@ public class DetallePeticion extends AppCompatActivity {
         edtxDescuentoAprobado.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-               try{
-                    //decuentoAprobado se toma del editText
-                    descuentoAprobado = Integer.parseInt(edtxDescuentoAprobado.getText().toString());
-                   double cantidadDescontada = ((subTotal*descuentoAprobado)/100);
-                   txtCantidadDescontada.setText("- $"+cantidadDescontada);
-                    double total = (subTotal - ((descuentoAprobado * subTotal) / (100)));
-                   //Formato de solo dos decimales
-                   DecimalFormat df = new DecimalFormat("0.00");
-                    txtTotal.setText("$" + df.format(total));
-                }catch(NumberFormatException e){
-                   txtTotal.setText("$"+subTotal);
-                   e.printStackTrace();
+               if (!(edtxDescuentoAprobado.getText().toString()).equals("")) {
+                   //decuentoAprobado se toma del editText
+                   descuentoAprobado = Integer.parseInt(edtxDescuentoAprobado.getText().toString());
+                   if (descuentoAprobado <= 100) {
+                       double cantidadDescontada = ((subTotal * descuentoAprobado) / 100);
+                       txtCantidadDescontada.setText("$" + cantidadDescontada);
+                       double total = (subTotal - ((descuentoAprobado * subTotal) / (100)));
+                       //Formato de solo dos decimales
+                       DecimalFormat df = new DecimalFormat("0.00");
+                       txtTotal.setText("$" + df.format(total));
+                       //mostrar alerta si se desea dar un descuento del 100%
+                       ImageView imageAlerta = (ImageView) findViewById(R.id.imageAlerta);
+                       if ((edtxDescuentoAprobado.getText().toString()).equals("100")) {
+                           imageAlerta.setVisibility(View.VISIBLE);
+                       } else {
+                           imageAlerta.setVisibility(View.INVISIBLE);
+                       }
+
+                   } else {
+                      Toast toastMenor100 = Toast.makeText(getApplicationContext(), "Inserte un descuento no mayor a 100%", Toast.LENGTH_SHORT);
+                       toastMenor100.setGravity(Gravity.CENTER,0,0);
+                       toastMenor100.show();
+                       edtxDescuentoAprobado.setText("100");
+                   }
 
                }
-            }
+
+               }
         });
 
 
