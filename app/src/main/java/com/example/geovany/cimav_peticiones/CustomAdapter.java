@@ -56,13 +56,13 @@ public class CustomAdapter extends ArrayAdapter<Peticion> {
         descuento.setText(item.getDescuentoSolicitado()+"%");
         //poniendo la imagen dependiendo de la prioridad
         switch (item.getPrioridad()){
-            case 0:
+            case 1:
                 categoria.setImageResource(R.mipmap.prioridad_baja);
                 break;
-            case 1:
+            case 2:
                 categoria.setImageResource(R.mipmap.prioridad_media);
                 break;
-            case 2:
+            case 3:
                 categoria.setImageResource(R.mipmap.prioridad_alta);
                 break;
 

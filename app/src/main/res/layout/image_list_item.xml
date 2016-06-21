@@ -9,8 +9,7 @@
         android:layout_height="50dp"
         android:id="@+id/prioridadImg"
         android:layout_marginRight="10dp"
-        android:layout_alignParentLeft="true"
-        android:background="@mipmap/prioridad_alta" />
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:layout_width="wrap_content"

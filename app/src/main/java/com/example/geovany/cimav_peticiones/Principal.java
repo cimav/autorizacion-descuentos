@@ -6,12 +6,16 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -29,22 +33,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Principal extends AppCompatActivity {
-    Button btnAceptar;
     String nombreCliente, descripcion, codigo, jsonString;
     double subTotal;
-    int descuentoSolicitado, id, prioridad;
+    int descuentoSolicitado, id, prioridad, iva;
     Intent inDetalle;
     ListView listView;
     protected RequestQueue fRequestQueue;
     private JSON miJson;
     JSONObject jsonRootObject;
-
+    FrameLayout layoutProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-        btnAceptar = (Button) findViewById(R.id.btnAceptar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+        layoutProgressBar = (FrameLayout) findViewById(R.id.layoutProgrresBar);
+        layoutProgressBar.setVisibility(View.VISIBLE);
+
         inDetalle = new Intent(this, DetallePeticion.class);
         listView = (ListView)findViewById(R.id.listView);
         miJson = JSON.getInstance(getApplication().getApplicationContext());
@@ -57,6 +64,7 @@ public class Principal extends AppCompatActivity {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
            makeRequest();
+
            // Toast.makeText(this, jsonString, Toast.LENGTH_SHORT).show();
 
             // Operaciones http
@@ -70,7 +78,29 @@ public class Principal extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.btnRefresh){
+           //metodo para refresh
+            finish();
+            startActivity(getIntent());
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void makeRequest(){
+
+
+
         String url = "http://dominiodeprueba.dx.am/PruebaJson.json";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(  Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -82,7 +112,7 @@ public class Principal extends AppCompatActivity {
                             List<Peticion> listaPeticiones = new ArrayList<>();
 
 
-                            JSONArray jsonArray = jsonRootObject.optJSONArray("peticiones");
+                            JSONArray jsonArray = jsonRootObject.optJSONArray("cotizaciones");
 
 
 
@@ -95,8 +125,9 @@ public class Principal extends AppCompatActivity {
                                 nombreCliente = jsonObject.getString("cliente").toString();
                                 descripcion = jsonObject.getString("descripcion").toString();
                                 subTotal = Double.parseDouble(jsonObject.getString("subTotal").toString());
-                                descuentoSolicitado = Integer.parseInt(jsonObject.getString("descuentoSolicitado").toString());
-                                prioridad = Integer.parseInt(jsonObject.getString("prioridad").toString());
+                                descuentoSolicitado = Integer.parseInt(jsonObject.getString("descuento_porcentaje").toString());
+                                prioridad = Integer.parseInt(jsonObject.getString("tiempo_entrega").toString());
+
 
 
                                 Peticion peticion = new Peticion();
@@ -107,6 +138,7 @@ public class Principal extends AppCompatActivity {
                                 peticion.setSubTotal(subTotal);
                                 peticion.setDescuentoSolicitado(descuentoSolicitado);
                                 peticion.setPrioridad(prioridad);
+
 
                                 listaPeticiones.add(peticion);
 
@@ -127,7 +159,8 @@ public class Principal extends AppCompatActivity {
                                     Peticion selected = (Peticion) parent.getItemAtPosition(position);
                                     //Mandar un bundle con los datos
                                     Bundle bDatos = new Bundle();
-                                    bDatos.putString("codigo",codigo);
+                                    bDatos.putInt("id",selected.getId());
+                                    bDatos.putString("codigo",selected.getCodigo());
                                     bDatos.putString("nombreCliente", selected.getNombreCliente());
                                     bDatos.putString("descripcion", selected.getDescripcion());
                                     bDatos.putDouble("subTotal", selected.getSubTotal());
@@ -160,6 +193,7 @@ public class Principal extends AppCompatActivity {
                 });
         //add request to queue
         fRequestQueue.add(jsonObjectRequest);
+        layoutProgressBar.setVisibility(View.GONE);
     }
     public void addToQueue(Request request) {
         if (request != null) {

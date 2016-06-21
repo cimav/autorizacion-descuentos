@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -20,15 +21,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DetallePeticion extends AppCompatActivity {
-    TextView txtNombreCliente,txtDescripcion, txtSubTotal, txtDescuentoSolicitado, txtTotal,txtCantidadDescontada;
+    TextView txtNombreCliente,txtDescripcion, txtSubTotal, txtDescuentoSolicitado, txtTotal,txtCantidadDescontada, txtIva;
     EditText edtxDescuentoAprobado, edtxMotivo;
     double subTotal;
-    int descuentoAprobado, descuentoSolicitado;
+    int descuentoAprobado, descuentoSolicitado, iva, id;
     Intent inRecibir;
+    String motivoDescuento = "";
     CheckBox chbxMotivo;
+    protected RequestQueue fRequestQueue;
 
 
     @Override
@@ -49,6 +60,7 @@ public class DetallePeticion extends AppCompatActivity {
         chbxMotivo = (CheckBox)findViewById(R.id.chbxMotivo);
         txtCantidadDescontada = (TextView)findViewById(R.id.txtCantidadDescontada);
         txtTotal = (TextView)findViewById(R.id.txtTotal) ;
+        txtIva = (TextView)findViewById(R.id.txtIva);
         edtxMotivo = (EditText) findViewById(R.id.edtxMotivo);
         chbxMotivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -65,6 +77,7 @@ public class DetallePeticion extends AppCompatActivity {
         //recibir el bundle
         inRecibir = getIntent();
         Bundle extras = inRecibir.getExtras();
+        id = extras.getInt("id");
         String nombreCliente = extras.getString("nombreCliente");
         String descripcion = extras.getString("descripcion");
         subTotal = extras.getDouble("subTotal");
@@ -77,12 +90,14 @@ public class DetallePeticion extends AppCompatActivity {
         txtSubTotal.setText("$" + subTotal);
         txtDescuentoSolicitado.setText(descuentoSolicitado + "%");
         edtxDescuentoAprobado.setText(descuentoAprobado+"");
-        //llenar total y subtotal
+        //llenar total, subtotal e iva
         double cantidadDescontada = ((subTotal*descuentoAprobado)/100);
+        double iva = (0.16*(subTotal-cantidadDescontada));
+        double total = (subTotal-cantidadDescontada)+iva;
         txtCantidadDescontada.setText("- $"+cantidadDescontada);
-        double total = (subTotal-((descuentoAprobado*subTotal)/(100)));
         //Formato de solo dos decimales
         DecimalFormat df = new DecimalFormat("0.00");
+        txtIva.setText("$"+df.format(iva));
         txtTotal.setText("$" + df.format(total));
 
 
@@ -104,11 +119,14 @@ public class DetallePeticion extends AppCompatActivity {
                    descuentoAprobado = Integer.parseInt(edtxDescuentoAprobado.getText().toString());
                    if (descuentoAprobado <= 100) {
                        double cantidadDescontada = ((subTotal * descuentoAprobado) / 100);
-                       txtCantidadDescontada.setText("$" + cantidadDescontada);
-                       double total = (subTotal - ((descuentoAprobado * subTotal) / (100)));
+                       double iva = (0.16*(subTotal-cantidadDescontada));
+                       double total = (iva+(subTotal-cantidadDescontada));
                        //Formato de solo dos decimales
                        DecimalFormat df = new DecimalFormat("0.00");
+                       txtCantidadDescontada.setText("$" + df.format(cantidadDescontada));
+                       txtIva.setText("$"+ df.format(iva));
                        txtTotal.setText("$" + df.format(total));
+
                        //mostrar alerta si se desea dar un descuento del 100%
                        ImageView imageAlerta = (ImageView) findViewById(R.id.imageAlerta);
                        if ((edtxDescuentoAprobado.getText().toString()).equals("100")) {
@@ -146,7 +164,46 @@ public class DetallePeticion extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
+                        if (chbxMotivo.isChecked()){
+                            motivoDescuento = edtxMotivo.getText().toString();
+                        }
                         //Yes button clicked
+                        String url = "http://dominiodeprueba.dx.am/PruebaJson.json";
+                        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
+                                new Response.Listener<String>()
+                                {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // response
+                                        Log.d("Response", response);
+                                    }
+                                },
+                                new Response.ErrorListener()
+                                {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // error
+                                        //Log.d("Error.Response", response);
+                                    }
+                                }
+                        ) {
+
+                            @Override
+                            protected Map<String, String> getParams()
+                            {
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("id",id+"");
+                                params.put("descuento_porcentaje",descuentoAprobado+"");
+                                params.put("motivo_descuento",motivoDescuento+"");
+
+
+                                return params;
+                            }
+
+                        };
+
+                        fRequestQueue.add(putRequest);
+
                         finish();
                         Toast.makeText(getApplicationContext(),"Solicitud aceptada", Toast.LENGTH_SHORT).show();
                         break;

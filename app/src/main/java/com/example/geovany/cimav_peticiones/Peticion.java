@@ -68,6 +68,7 @@ public class Peticion {
         this.descripcion = descripcion;
     }
 
+
     @Override
     public String toString() {
         return codigo;
