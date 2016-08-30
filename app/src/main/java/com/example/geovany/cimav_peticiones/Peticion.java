@@ -5,7 +5,7 @@ package com.example.geovany.cimav_peticiones;
  */
 public class Peticion {
     private int id, descuentoSolicitado, prioridad;
-    private String codigo, nombreCliente, descripcion;
+    private String codigo, nombreCliente, descripcion, motivoDescuento;
     private double subTotal;
 
     public Peticion(){
@@ -68,6 +68,13 @@ public class Peticion {
         this.descripcion = descripcion;
     }
 
+    public String getMotivoDescuento() {
+        return motivoDescuento;
+    }
+
+    public void setMotivoDescuento(String motivoDescuento) {
+        this.motivoDescuento = motivoDescuento;
+    }
 
     @Override
     public String toString() {

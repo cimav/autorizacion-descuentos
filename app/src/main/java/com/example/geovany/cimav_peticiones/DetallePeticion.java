@@ -21,11 +21,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -37,9 +42,9 @@ public class DetallePeticion extends AppCompatActivity {
     double subTotal;
     int descuentoAprobado, descuentoSolicitado, iva, id;
     Intent inRecibir;
-    String motivoDescuento = "";
+    String motivoDescuento;
     CheckBox chbxMotivo;
-    protected RequestQueue fRequestQueue;
+    RequestQueue requestQueue;
 
 
     @Override
@@ -49,7 +54,7 @@ public class DetallePeticion extends AppCompatActivity {
         setContentView(R.layout.activity_detalle_peticion);
 
 
-
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         //Crear los TextView y EditText
         txtNombreCliente = (TextView) findViewById(R.id.txtCliente);
@@ -83,6 +88,14 @@ public class DetallePeticion extends AppCompatActivity {
         subTotal = extras.getDouble("subTotal");
         descuentoSolicitado = extras.getInt("descuentoSolicitado");
         descuentoAprobado = descuentoSolicitado;
+        motivoDescuento = extras.getString("motivoDescuento");
+
+
+        //mostrar el motivo si es que hay uno
+        if (!motivoDescuento.isEmpty()){
+            chbxMotivo.setChecked(true);
+            edtxMotivo.setText(motivoDescuento);
+        }
 
         //Mostrar los datos por el TextView
         txtNombreCliente.setText(nombreCliente);
@@ -168,41 +181,10 @@ public class DetallePeticion extends AppCompatActivity {
                             motivoDescuento = edtxMotivo.getText().toString();
                         }
                         //Yes button clicked
-                        String url = "http://dominiodeprueba.dx.am/PruebaJson.json";
-                        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
-                                new Response.Listener<String>()
-                                {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        // response
-                                        Log.d("Response", response);
-                                    }
-                                },
-                                new Response.ErrorListener()
-                                {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        // error
-                                        //Log.d("Error.Response", response);
-                                    }
-                                }
-                        ) {
-
-                            @Override
-                            protected Map<String, String> getParams()
-                            {
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("id",id+"");
-                                params.put("descuento_porcentaje",descuentoAprobado+"");
-                                params.put("motivo_descuento",motivoDescuento+"");
 
 
-                                return params;
-                            }
 
-                        };
 
-                        fRequestQueue.add(putRequest);
 
                         finish();
                         Toast.makeText(getApplicationContext(),"Solicitud aceptada", Toast.LENGTH_SHORT).show();
@@ -229,8 +211,45 @@ public class DetallePeticion extends AppCompatActivity {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
+                        if (chbxMotivo.isChecked()){
+                            motivoDescuento = edtxMotivo.getText().toString();
+                        }else motivoDescuento = "";
+                        final String url = "http://zeus.cimav.edu.mx:3001/vinculacion/rechazar_descuento/"+id;
+
+
+                        StringRequest jsonObjReq = new StringRequest(Request.Method.POST, url,
+                                new Response.Listener<String>()
+                                {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // response
+                                        Log.d("Response", response);
+                                        Toast.makeText(getApplication(),response, Toast.LENGTH_LONG).show();
+                                    }
+                                },
+                                new Response.ErrorListener()
+                                {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // error
+                                        Toast.makeText(getApplication(),error.toString(), Toast.LENGTH_SHORT).show();
+
+                                    }
+                                }
+                        ) {
+                            @Override
+                            protected Map<String, String> getParams()
+                            {
+                                Map<String, String>  params = new HashMap<String, String>();
+                                params.put("motivo_descuento", motivoDescuento);
+
+                                return params;
+                            }
+                        };
+
+                        requestQueue.add(jsonObjReq);
                         finish();
-                        Toast.makeText(getApplicationContext(),"Solicitud rechazada", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplication(),"Solicitud rechazada", Toast.LENGTH_SHORT).show();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:

@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Principal extends AppCompatActivity {
-    String nombreCliente, descripcion, codigo, jsonString;
+    String nombreCliente, descripcion, codigo, jsonString, motivoDescuento;
     double subTotal;
     int descuentoSolicitado, id, prioridad, iva;
     Intent inDetalle;
@@ -80,6 +80,12 @@ public class Principal extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        makeRequest();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu,menu);
@@ -90,18 +96,21 @@ public class Principal extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.btnRefresh){
            //metodo para refresh
-            finish();
-            startActivity(getIntent());
+            refreshActivity();
 
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void refreshActivity(){
+        finish();
+        startActivity(getIntent());
     }
 
     private void makeRequest(){
 
 
 
-        String url = "http://dominiodeprueba.dx.am/PruebaJson.json";
+        String url = "http://zeus.cimav.edu.mx:3001/vinculacion/descuento_solicitado";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(  Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -124,10 +133,10 @@ public class Principal extends AppCompatActivity {
                                 codigo  = jsonObject.getString("codigo").toString();
                                 nombreCliente = jsonObject.getString("cliente").toString();
                                 descripcion = jsonObject.getString("descripcion").toString();
-                                subTotal = Double.parseDouble(jsonObject.getString("subTotal").toString());
+                                subTotal = Double.parseDouble(jsonObject.getString("subtotal").toString());
                                 descuentoSolicitado = Integer.parseInt(jsonObject.getString("descuento_porcentaje").toString());
                                 prioridad = Integer.parseInt(jsonObject.getString("tiempo_entrega").toString());
-
+                                motivoDescuento = jsonObject.getString("motivo_descuento").toString();
 
 
                                 Peticion peticion = new Peticion();
@@ -138,6 +147,7 @@ public class Principal extends AppCompatActivity {
                                 peticion.setSubTotal(subTotal);
                                 peticion.setDescuentoSolicitado(descuentoSolicitado);
                                 peticion.setPrioridad(prioridad);
+                                peticion.setMotivoDescuento(motivoDescuento);
 
 
                                 listaPeticiones.add(peticion);
@@ -165,6 +175,7 @@ public class Principal extends AppCompatActivity {
                                     bDatos.putString("descripcion", selected.getDescripcion());
                                     bDatos.putDouble("subTotal", selected.getSubTotal());
                                     bDatos.putInt("descuentoSolicitado", selected.getDescuentoSolicitado());
+                                    bDatos.putString("motivoDescuento", selected.getMotivoDescuento());
 
                                     inDetalle.putExtras(bDatos);
 
