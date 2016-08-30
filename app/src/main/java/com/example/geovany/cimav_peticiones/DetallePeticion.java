@@ -179,13 +179,41 @@ public class DetallePeticion extends AppCompatActivity {
                     case DialogInterface.BUTTON_POSITIVE:
                         if (chbxMotivo.isChecked()){
                             motivoDescuento = edtxMotivo.getText().toString();
-                        }
-                        //Yes button clicked
+                        }else motivoDescuento = "";
 
+                        final String url = "http://zeus.cimav.edu.mx:3001/vinculacion/aceptar_descuento/"+id;
+                        StringRequest jsonObjReq = new StringRequest(Request.Method.POST, url,
+                                new Response.Listener<String>()
+                                {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // response
+                                        Log.d("Response", response);
+                                        Toast.makeText(getApplication(),response, Toast.LENGTH_LONG).show();
+                                    }
+                                },
+                                new Response.ErrorListener()
+                                {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // error
+                                        Toast.makeText(getApplication(),error.toString(), Toast.LENGTH_SHORT).show();
 
+                                    }
+                                }
+                        ) {
+                            @Override
+                            protected Map<String, String> getParams()
+                            {
+                                Map<String, String>  params = new HashMap<String, String>();
+                                params.put("motivo_descuento", motivoDescuento);
+                                params.put("descuento_porcentaje", descuentoAprobado+"");
 
+                                return params;
+                            }
+                        };
 
-
+                        requestQueue.add(jsonObjReq);
                         finish();
                         Toast.makeText(getApplicationContext(),"Solicitud aceptada", Toast.LENGTH_SHORT).show();
                         break;
@@ -266,7 +294,6 @@ public class DetallePeticion extends AppCompatActivity {
 
 
     }
-
 
 
 }
