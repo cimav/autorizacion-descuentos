@@ -15,6 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -25,7 +31,8 @@ import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
 
 import java.io.InputStream;
-import java.security.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -34,6 +41,7 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
     private Button button_revoke,button_logout;
     private TextView textView_name, textView_email;
     private RelativeLayout profile_layout;
+    protected RequestQueue loginRequestQueue;
     private ImageView imageView_profile_image, imgCimav;
 
     private boolean mIntentInProgress;
@@ -49,8 +57,9 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
         btnSignIn = (SignInButton) findViewById(R.id.btn_sign_in);
         imgCimav =(ImageView)findViewById(R.id.imgCimav);
         btnSignIn.setOnClickListener(this);
+        loginRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        button_revoke = (Button) findViewById(R.id.button_revoke);
+        button_revoke = (Button) findViewById(R.id.button_continue);
         button_revoke.setOnClickListener(this);
 
         button_logout = (Button) findViewById(R.id.button_logout);
@@ -83,12 +92,50 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
                 // logout button clicked
                 signOutFromGplus();
                 break;
-            case R.id.button_revoke:
-                // revoke button clicked
-                //revokeGplusAccess();
-                //Start Pincipal Activity
-                Intent inIniciarPrincipal = new Intent(this,Principal.class);
-                startActivity(inIniciarPrincipal);
+            case R.id.button_continue:
+                //Verificación en el sigre
+                final String url = "http://zeus.cimav.edu.mx:3001/vinculacion/auth_outside";
+
+
+                StringRequest jsonObjReq = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>()
+                        {
+                            @Override
+                            public void onResponse(String response) {
+                                // response
+                                Log.d("Response", response);
+                                if (response.contains("true") ){
+                                    //Start Pincipal Activity
+                                    Intent inIniciarPrincipal = new Intent(getApplicationContext(),Principal.class);
+                                    startActivity(inIniciarPrincipal);
+                                }
+                                else {
+                                    Toast.makeText(getApplication(),"Usuario no autorizado por CIMAV", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener()
+                        {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                // error
+                                Toast.makeText(getApplication(),error.toString(), Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                ) {
+                    @Override
+                    protected Map<String, String> getParams()
+                    {
+                        Map<String, String>  params = new HashMap<String, String>();
+                        params.put("user_email", textView_email.getText().toString());
+
+                        return params;
+                    }
+                };
+
+                loginRequestQueue.add(jsonObjReq);
+
                 break;
 
 

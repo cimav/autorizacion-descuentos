@@ -53,6 +53,15 @@
             android:layout_alignParentTop="true"
             android:textFilterEnabled="false" />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="No se encontraron solicitudes de descuento"
+            android:id="@+id/txtVacio"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:visibility="visible" />
+
     </LinearLayout>
 
 </LinearLayout>

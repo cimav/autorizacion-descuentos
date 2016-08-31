@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Profile Details"
+            android:text="Detalle de Perfil"
             android:id="@+id/textView"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Continuar"
-            android:id="@+id/button_revoke"
+            android:id="@+id/button_continue"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/button_logout"
             android:layout_centerHorizontal="true" />

@@ -215,7 +215,6 @@ public class DetallePeticion extends AppCompatActivity {
 
                         requestQueue.add(jsonObjReq);
                         finish();
-                        Toast.makeText(getApplicationContext(),"Solicitud aceptada", Toast.LENGTH_SHORT).show();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:

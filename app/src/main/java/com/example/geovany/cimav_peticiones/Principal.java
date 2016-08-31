@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -42,6 +43,7 @@ public class Principal extends AppCompatActivity {
     private JSON miJson;
     JSONObject jsonRootObject;
     FrameLayout layoutProgressBar;
+    TextView txtVacio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,12 @@ public class Principal extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         layoutProgressBar = (FrameLayout) findViewById(R.id.layoutProgrresBar);
         layoutProgressBar.setVisibility(View.VISIBLE);
+        //txtVacio = (TextView)findViewById(R.id.txtVacio);
+
 
         inDetalle = new Intent(this, DetallePeticion.class);
         listView = (ListView)findViewById(R.id.listView);
+        listView.setEmptyView(findViewById(R.id.txtVacio));
         miJson = JSON.getInstance(getApplication().getApplicationContext());
         fRequestQueue = miJson.getRequestQueue();
         //Iniciando la lista donde se almacenaran los objetos
