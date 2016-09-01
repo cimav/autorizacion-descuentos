@@ -23,14 +23,13 @@
 
         <activity
             android:name=".Principal"
-            android:label="Peticiones"></activity>
+           ></activity>
         <activity
             android:name=".DetallePeticion"
-            android:label="Detalle"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".LoginActivity"
-            android:label="Login">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
