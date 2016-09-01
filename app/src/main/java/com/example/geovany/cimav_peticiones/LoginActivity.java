@@ -6,11 +6,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +42,7 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
     private SignInButton btnSignIn;
     private Button button_revoke,button_logout;
     private TextView textView_name, textView_email;
-    private RelativeLayout profile_layout;
+    private LinearLayout profile_layout;
     protected RequestQueue loginRequestQueue;
     private ImageView imageView_profile_image, imgCimav;
 
@@ -68,7 +70,7 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
         imageView_profile_image = (ImageView) findViewById(R.id.imageView_profile_image);
         textView_name = (TextView) findViewById(R.id.textView_name);
         textView_email = (TextView) findViewById(R.id.textView_email);
-        profile_layout = (RelativeLayout) findViewById(R.id.profile_layout);
+        profile_layout = (LinearLayout) findViewById(R.id.profile_layout);
 
         // Initializing google plus api client
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -110,7 +112,8 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
                                     startActivity(inIniciarPrincipal);
                                 }
                                 else {
-                                    Toast.makeText(getApplication(),"Usuario no autorizado por CIMAV", Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(profile_layout, "Usuario no autorizado por CIMAV", Snackbar.LENGTH_SHORT)
+                                            .show();
                                 }
                             }
                         },
@@ -158,7 +161,8 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
     @Override
     public void onConnected(Bundle bundle) {
         mSignInClicked = false;
-        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+        Snackbar.make(profile_layout, "Usuario conectado", Snackbar.LENGTH_SHORT)
+                .show();
 
         // Get user's information
         getProfileInformation();

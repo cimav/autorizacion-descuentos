@@ -343,7 +343,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="70"
-                        android:background="@color/colorAccent"
+                        android:background="@drawable/my_button_selector_red"
                         android:onClick="clickRechazar"
                         android:text="Rechazar"
                         android:textColor="@color/abc_primary_text_disable_only_material_dark" />
@@ -361,8 +361,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="50"
-                        android:background="@color/accent_material_light"
-                        android:backgroundTint="@color/abc_search_url_text"
+                        android:background="@drawable/my_button_selector_green"
                         android:elegantTextHeight="false"
                         android:onClick="clickAceptar"
                         android:paddingLeft="0dp"
