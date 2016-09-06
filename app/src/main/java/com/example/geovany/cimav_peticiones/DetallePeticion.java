@@ -181,7 +181,7 @@ public class DetallePeticion extends AppCompatActivity {
                             motivoDescuento = edtxMotivo.getText().toString();
                         }else motivoDescuento = "";
 
-                        final String url = "http://zeus.cimav.edu.mx:3001/vinculacion/aceptar_descuento/"+id;
+                        final String url = "http://sigre.cimav.edu.mx/vinculacion/aceptar_descuento/"+id;
                         StringRequest jsonObjReq = new StringRequest(Request.Method.POST, url,
                                 new Response.Listener<String>()
                                 {
@@ -241,7 +241,7 @@ public class DetallePeticion extends AppCompatActivity {
                         if (chbxMotivo.isChecked()){
                             motivoDescuento = edtxMotivo.getText().toString();
                         }else motivoDescuento = "";
-                        final String url = "http://zeus.cimav.edu.mx:3001/vinculacion/rechazar_descuento/"+id;
+                        final String url = "http://sigre.cimav.edu.mx/vinculacion/rechazar_descuento/"+id;
 
 
                         StringRequest jsonObjReq = new StringRequest(Request.Method.POST, url,

@@ -115,7 +115,7 @@ public class Principal extends AppCompatActivity {
 
 
 
-        String url = "http://zeus.cimav.edu.mx:3001/vinculacion/descuento_solicitado";
+        String url = "http://sigre.cimav.edu.mx/vinculacion/descuento_solicitado";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(  Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override

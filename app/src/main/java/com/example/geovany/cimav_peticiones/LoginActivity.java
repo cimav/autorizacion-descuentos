@@ -96,7 +96,7 @@ public class LoginActivity extends ActionBarActivity implements GoogleApiClient.
                 break;
             case R.id.button_continue:
                 //Verificación en el sigre
-                final String url = "http://zeus.cimav.edu.mx:3001/vinculacion/auth_outside";
+                final String url = "http://sigre.cimav.edu.mx/vinculacion/auth_outside";
 
 
                 StringRequest jsonObjReq = new StringRequest(Request.Method.POST, url,
