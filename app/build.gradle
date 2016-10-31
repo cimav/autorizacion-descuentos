@@ -25,8 +25,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
-    compile 'com.google.android.gms:play-services:6.5.87'
-    compile files('libs/volley.jar')
+    // Dependency for Google Sign-In
+    compile 'com.google.android.gms:play-services-auth:9.6.1'
+
 
 
 }

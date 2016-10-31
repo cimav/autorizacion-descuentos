@@ -1,0 +1,60 @@
+{
+  "project_info": {
+    "project_number": "584394356099",
+    "project_id": "loginprueba-1302"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584394356099:android:c2b127ea0067c30e",
+        "android_client_info": {
+          "package_name": "com.example.geovany.cimav_peticiones"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "584394356099-avov21vmph4g4sdsof10d7i7uk5n8m8j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.geovany.cimav_peticiones",
+            "certificate_hash": "D450CD597FCDE6A880306FFE81907918C93E0C34"
+          }
+        },
+        {
+          "client_id": "584394356099-i3ajluq06q4bcsos8g15723g7qodgkji.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.geovany.cimav_peticiones",
+            "certificate_hash": "30CE5C9890E64BFBEB4B5975FE92E263AEDFF937"
+          }
+        },
+        {
+          "client_id": "584394356099-rp2e4405ftr59qigi7l50a4c4vstm76i.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "584394356099-vi83kf0uvdma2trsplkp9l6tgh87eube.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfNMlRxgJEgOsBM7dLcaMANLa3hNWswZ4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
